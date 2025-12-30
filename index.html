@@ -256,8 +256,10 @@ button:active {
 
     video {
       width: 100%;
+      height: auto;
+      object-fit : cover;
       border-radius: 14px;
-      transform: scaleX(-1);
+      transform: none;
     }
     .author-inline {
         position: relative;
@@ -356,7 +358,11 @@ button:active {
   try {
     // Try BACK camera first (mobile)
     stream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: { exact: "environment" } }
+      video: { facingMode: { exact: "environment" },
+        width: { ideal: 1280 },
+        height: { ideal: 720 },
+        zoom: 1     
+             }
     });
   } catch (err) {
     // Fallback for laptops / unsupported devices
