@@ -374,11 +374,19 @@ button:active {
     canvas.height = video.videoHeight;
 
     const ctx = canvas.getContext("2d");
+    ctx.save()
     ctx.translate(canvas.width, 0);
     ctx.scale(-1, 1);
     ctx.drawImage(video, 0, 0);
+    ctx.restore()
+    const ImageData = canvas.toDataURL("image/png");
+    window.capturedImage = ImageData;
 
-    window.capturedImage = canvas.toDataURL("image/png");
+    const previewImg = document.getElementById("previewImg");
+    previewImg.src = ImageData;
+    document.getElementById("imagePreview").style.display = "block";
+   
+
     closeCamera();
   }
 
