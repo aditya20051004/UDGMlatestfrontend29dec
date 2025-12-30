@@ -281,6 +281,20 @@ button:active {
     <h1>Food Ingredient Copilot</h1>
     <p>Paste ingredients or scan a food label.</p>
 
+    <div id="imagePreview" style="display:none; margin-bottom:10px;">
+    <img
+      id="previewImg"
+      style="
+        width:72px;
+        height:72px;
+        border-radius:12px;
+        box-shadow:0 0 12px rgba(120,140,255,0.5);
+        object-fit: cover;
+      "
+    />
+  </div>
+
+
     <textarea id="input" placeholder="e.g. wheat, sugar, palm oil"></textarea>
 
     <div class="actions">
@@ -331,11 +345,27 @@ button:active {
   let stream;
   window.capturedImage = null;
 
-  async function openCamera() {
-    stream = await navigator.mediaDevices.getUserMedia({ video: true });
-    document.getElementById("video").srcObject = stream;
-    document.getElementById("cameraModal").style.display = "block";
+   async function openCamera() {
+  const videoEl = document.getElementById("video");
+
+  try {
+    // Try BACK camera first (mobile)
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { exact: "environment" } }
+    });
+  } catch (err) {
+    // Fallback for laptops / unsupported devices
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: true
+    });
   }
+
+  videoEl.srcObject = stream;
+  videoEl.play();
+  document.getElementById("cameraModal").style.display = "block";
+}
+
+  
 
   function capturePhoto() {
     const canvas = document.getElementById("canvas");
